@@ -329,7 +329,7 @@ const Landing: React.FC = () => {
                                     collectors by collectors!
                                 </p>
                                 <p>
-                                    Users can easily setup an account, create a
+                                    Users can easily set up an account, create a
                                     profile, and start cataloguing their
                                     collection. Kollec allows for users to
                                     quickly and easily digitize their expansive
@@ -380,13 +380,9 @@ const Landing: React.FC = () => {
                                 </p>
                                 <p>
                                     Do not worry, despite Kollec being open
-                                    source, we have implemented robust security
-                                    measures to protect user data and ensure a
-                                    safe trading environment. We take privacy
-                                    seriously and have designed our systems to
-                                    safeguard your information while still
-                                    providing a seamless and enjoyable
-                                    experience.
+                                    source, we have implemented the proper
+                                    security measures to protect user data and
+                                    ensure a safe trading environment.
                                 </p>
                             </div>
 

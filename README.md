@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/df0ea1e2-df24-499c-8949-e7e3d7502f80
 
 Kollec is a secure and centralized card collection platform built for collectors by collectors. We're starting _not so small_ with Pokémon cards!
 
-Users can easily setup an account, create a profile, and start cataloguing their collection. Kollec allows for users to quickly and easily digitize their expansive Pokémon card collection using their device's camera to identify cards in real time.
+Users can easily set up an account, create a profile, and start cataloguing their collection. Kollec allows for users to quickly and easily digitize their expansive Pokémon card collection using their device's camera to identify cards in real time.
 
 With Kollec, users can easily keep track of their collection and seamlessly navigate through it, while connecting with other collectors to trade cards together.
 
