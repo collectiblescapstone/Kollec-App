@@ -115,13 +115,12 @@ describe('Landing Page', () => {
     it('renders static landing content', () => {
         render(<Page />)
 
+        // Check for current content
         expect(
             screen.getByText(
-                /Kollec is a collection management platform developed as a final year Computer Science capstone project at McMaster University/i
+                /Kollec is a secure and centralized Pokémon card collection platform built for collectors by collectors!/i
             )
         ).toBeInTheDocument()
-
-        expect(screen.getByText(/2026 TSH B129/i)).toBeInTheDocument()
 
         expect(screen.getByTestId('logo')).toBeInTheDocument()
 
@@ -147,50 +146,6 @@ describe('Landing Page', () => {
 
         expect(signupAnchor).toHaveAttribute('href', '/sign-up')
         expect(loginAnchor).toHaveAttribute('href', '/sign-in')
-    })
-
-    it('shows a countdown timer and updates as time advances', () => {
-        jest.useFakeTimers()
-
-        // Start 10 seconds before target
-        const start = new Date(2026, 3, 7, 9, 59, 50)
-        jest.setSystemTime(start)
-
-        act(() => {
-            render(<Page />)
-        })
-
-        act(() => {
-            jest.advanceTimersByTime(1000)
-        })
-
-        expect(screen.getByText(/0:00:00:0?9/)).toBeInTheDocument()
-
-        act(() => {
-            jest.advanceTimersByTime(3000)
-        })
-
-        expect(screen.getByText(/0:00:00:0?6/)).toBeInTheDocument()
-    })
-
-    it('shows launch message when target time is reached or passed', () => {
-        jest.useFakeTimers()
-
-        // Set time just after target
-        const afterTarget = new Date(2026, 3, 7, 10, 0, 1)
-        jest.setSystemTime(afterTarget)
-
-        act(() => {
-            render(<Page />)
-        })
-
-        act(() => {
-            jest.advanceTimersByTime(1000)
-        })
-
-        expect(
-            screen.getByText(/Come see our demo at the capstone expo!/i)
-        ).toBeInTheDocument()
     })
 
     it('handles anchor clicks by scrolling to and focusing the target element', () => {
