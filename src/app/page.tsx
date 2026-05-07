@@ -1,14 +1,8 @@
 'use client'
 
 // React
-import React, { useEffect, useState } from 'react'
-import {
-    LuHandshake,
-    LuScanEye,
-    LuSearch,
-    LuLinkedin,
-    LuGithub
-} from 'react-icons/lu'
+import React, { useEffect } from 'react'
+import { LuHandshake, LuScanEye, LuSearch } from 'react-icons/lu'
 
 // Next.js
 import Link from 'next/link'
@@ -27,7 +21,6 @@ import {
 
 // Child Components
 import { Logo } from '@/components/logo/Logo'
-import TeamMember from '@/components/landing/TeamMember'
 import { useAuth } from '@/context/AuthProvider'
 import { Capacitor } from '@capacitor/core'
 import TitleLogo from '@/components/auth/TitleLogo'
@@ -48,174 +41,6 @@ const Landing: React.FC = () => {
             }
         }
     }
-
-    const [launch, setLaunch] = useState(false)
-    const [days, setDays] = useState(0)
-    const [hours, setHours] = useState(0)
-    const [minutes, setMinutes] = useState(0)
-    const [seconds, setSeconds] = useState(0)
-
-    useEffect(() => {
-        const target = new Date(2026, 3, 7, 10, 0, 0) // april 7th, 10:00am
-
-        const interval = setInterval(() => {
-            const now = new Date()
-            const difference = target.getTime() - now.getTime()
-
-            const d = Math.floor(difference / (1000 * 60 * 60 * 24))
-            setDays(d)
-
-            const h = Math.floor(
-                (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            )
-            setHours(h)
-
-            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-            setMinutes(m)
-
-            const s = Math.floor((difference % (1000 * 60)) / 1000)
-            setSeconds(s)
-
-            if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
-                setLaunch(true)
-                clearInterval(interval)
-            }
-        }, 1000)
-
-        return () => clearInterval(interval)
-    }, [])
-
-    // team members list
-    const teamMembers = [
-        {
-            name: 'Tânia Da Silva',
-            role: 'Front-end Lead',
-            links: [
-                {
-                    href: 'https://github.com/taniadasilva17',
-                    icon: <LuGithub />
-                },
-                {
-                    href: 'https://www.linkedin.com/in/tania-da-silva823',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Architected the front-end framework and developed the
-                    application&apos;s page structures, ensuring a UI layout
-                    prepared for full-stack integration.
-                </p>
-            )
-        },
-        {
-            name: 'Norman Liang',
-            role: 'Data Lead',
-            links: [
-                { href: 'https://github.com/Norman-Liang', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/norman-liang-03261122a',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Architected the database framework and proper API routing,
-                    integrating the dynamic data with front end functionalities.
-                </p>
-            )
-        },
-        {
-            name: 'Elite Lu',
-            role: 'Design Lead',
-            links: [
-                { href: 'https://github.com/honkita', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/elitelu',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Directed the end-to-end UX design and facilitated full-stack
-                    connectivity while managing dataset accuracy and
-                    co-facilitated the weekly Scrum meetings.
-                </p>
-            )
-        },
-        {
-            name: 'Ishpreet Nagi',
-            role: 'Back-end Lead',
-            links: [
-                { href: 'https://github.com/IshpreetNagi', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/ishpreetnagi',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Developed the core trade-matching algorithm and integrated
-                    the front-end with back-end services to transform static
-                    pages into a functional, data-driven application.
-                </p>
-            )
-        },
-        {
-            name: 'James Nickoli',
-            role: 'Vision Model Lead',
-            links: [
-                { href: 'https://github.com/rsninja722', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/james-nickoli',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Developed the Computer Vision model responsible for
-                    real-time card identification and recognition from camera
-                    input.
-                </p>
-            )
-        },
-        {
-            name: 'Kenneth Ong',
-            role: 'QA Lead',
-            links: [
-                { href: 'https://github.com/kennethkvs', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/kennethkvs',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Developed the user authentication flows and testing
-                    framework while co-managing project milestones and weekly
-                    Scrum meetings.
-                </p>
-            )
-        },
-        {
-            name: 'Geon Youn',
-            role: 'ML Lead',
-            links: [
-                { href: 'https://github.com/geon-youn', icon: <LuGithub /> },
-                {
-                    href: 'https://www.linkedin.com/in/geon-youn',
-                    icon: <LuLinkedin />
-                }
-            ],
-            description: (
-                <p>
-                    Engineered the NLP search features and semantic matching
-                    engine while assisting with the development of the camera
-                    vision system.
-                </p>
-            )
-        }
-    ]
 
     useEffect(() => {
         if (session) {
@@ -355,10 +180,6 @@ const Landing: React.FC = () => {
 
           /* ensure anchored sections are visible under any sticky header */
           .card { scroll-margin-top: 90px; }
-          
-          .timer-card {
-            text-align: center;
-          }
 
           .card:focus {
             box-shadow: 0 0 0 3px rgba(0,59,73,0.15);
@@ -390,9 +211,9 @@ const Landing: React.FC = () => {
           }
 
           .footer {
-            margin-top: 20px;
+            margin-top: 25px;
             text-align: center;
-            font-size: 1.9em;
+            font-size: 1.0em;
             color: #003b49;
           }
         `}
@@ -443,6 +264,7 @@ const Landing: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             color="brand.turtoise"
+                                            size="lg"
                                         >
                                             About
                                         </Button>
@@ -456,6 +278,7 @@ const Landing: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             color="brand.turtoise"
+                                            size="lg"
                                         >
                                             Features
                                         </Button>
@@ -471,6 +294,7 @@ const Landing: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             color="brand.turtoise"
+                                            size="lg"
                                         >
                                             Sign Up
                                         </Button>
@@ -486,6 +310,7 @@ const Landing: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             color="brand.turtoise"
+                                            size="lg"
                                         >
                                             Login
                                         </Button>
@@ -496,33 +321,21 @@ const Landing: React.FC = () => {
 
                         {/* Content Section */}
                         <div className="content">
-                            {launch ? (
-                                <div className="card timer-card">
-                                    <h1>
-                                        Come see our demo at the capstone expo!
-                                    </h1>
-                                </div>
-                            ) : (
-                                <div className="card timer-card">
-                                    <h1>
-                                        {days}:{String(hours).padStart(2, '0')}:
-                                        {String(minutes).padStart(2, '0')}:
-                                        {String(seconds).padStart(2, '0')}
-                                    </h1>
-                                    <p>Time until launch!</p>
-                                </div>
-                            )}
-
                             <div className="card" id="about" tabIndex={-1}>
-                                <h1>About Us</h1>
+                                <h1>What is Kollec?</h1>
                                 <p>
-                                    Kollec is a collection management platform
-                                    developed as a final year Computer Science
-                                    capstone project at McMaster University. Our
-                                    mission is to bridge the gap between
-                                    physical collectibles and digital
-                                    organization using Computer Vision and
-                                    Natural Language Processing.
+                                    Kollec is a secure and centralized Pokémon
+                                    card collection platform built for
+                                    collectors by collectors!
+                                </p>
+                                <p>
+                                    Users can easily set up an account, create a
+                                    profile, and start cataloguing their
+                                    collection. Kollec allows for users to
+                                    quickly and easily digitize their expansive
+                                    Pokémon card collection using their
+                                    device&apos;s camera to identify cards in
+                                    real time.
                                 </p>
                                 <p>
                                     Beyond organization, Kollec actively
@@ -531,7 +344,10 @@ const Landing: React.FC = () => {
                                     viable, mutually beneficial trades.
                                 </p>
                                 <p>
-                                    Kollec can be found on GitHub:
+                                    Kollec is made for the community by the
+                                    community, and thus the application code is
+                                    fully open source and available for anyone
+                                    to view and contribute to on{' '}
                                     <a
                                         href="https://github.com/collectiblescapstone/Kollec-App"
                                         target="_blank"
@@ -550,28 +366,24 @@ const Landing: React.FC = () => {
                                             color="brand.turtoise"
                                             fontSize="15px"
                                             size="sm"
-                                            px={3}
-                                            py={1}
+                                            px={0}
+                                            py={0}
                                             height="auto"
                                             lineHeight="1"
-                                            style={{ verticalAlign: 'middle' }}
+                                            // style={{ verticalAlign: 'middle' }}
                                         >
-                                            Kollec GitHub
+                                            GitHub
                                         </Button>
                                     </a>
+                                    . We welcome any and all contributions to
+                                    help make Kollec even better!
                                 </p>
-                                <ul>
-                                    {teamMembers.map((m) => (
-                                        <li key={m.name}>
-                                            <TeamMember
-                                                name={m.name}
-                                                role={m.role}
-                                                links={m.links}
-                                                description={m.description}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
+                                <p>
+                                    Do not worry, despite Kollec being open
+                                    source, we have implemented the proper
+                                    security measures to protect user data and
+                                    ensure a safe trading environment.
+                                </p>
                             </div>
 
                             <div className="card" id="features" tabIndex={-1}>
@@ -596,7 +408,7 @@ const Landing: React.FC = () => {
                                         <Tabs.Indicator />
                                     </Tabs.List>
                                     <Tabs.Content value="Identification">
-                                        <Heading as="h3">
+                                        <Heading as="h3" mb={2}>
                                             Card Identification
                                         </Heading>
                                         <Text>
@@ -607,7 +419,7 @@ const Landing: React.FC = () => {
                                             No more manual entry or searching
                                             through endless lists!
                                         </Text>
-                                        <Heading as="h4">
+                                        <Heading as="h4" mb={2}>
                                             The Technology
                                         </Heading>
                                         <Text>
@@ -624,7 +436,9 @@ const Landing: React.FC = () => {
                                         </Text>
                                     </Tabs.Content>
                                     <Tabs.Content value="Search">
-                                        <Heading as="h3">Card Search</Heading>
+                                        <Heading as="h3" mb={2}>
+                                            Card Search
+                                        </Heading>
                                         <Text>
                                             Kollec allows you to search your
                                             Pokémon collection using natural
@@ -636,7 +450,7 @@ const Landing: React.FC = () => {
                                             bring you the right results
                                             instantly.
                                         </Text>
-                                        <Heading as="h4">
+                                        <Heading as="h4" mb={2}>
                                             The Technology
                                         </Heading>
                                         <Text>
@@ -656,7 +470,7 @@ const Landing: React.FC = () => {
                                         </Text>
                                     </Tabs.Content>
                                     <Tabs.Content value="Trading">
-                                        <Heading as="h3">
+                                        <Heading as="h3" mb={2}>
                                             Trading Algorithm
                                         </Heading>
                                         <Text>
@@ -698,7 +512,7 @@ const Landing: React.FC = () => {
                 </div>
 
                 <footer className="footer">
-                    <p>&copy; 2026 TSH B129</p>
+                    <p>&copy; 2026 Kollec</p>
                 </footer>
             </div>
         </>
