@@ -78,7 +78,7 @@ For developers interested in contributing to the project, please refer to the [C
 
 ## Contact
 
-Feel free to contact any of the contributing developers if you have any questions or want to get involved!
+Feel free to contact any of the contributing developers if you have any questions or wish to get involved!
 
 ### Emails:
 
