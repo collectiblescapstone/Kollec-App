@@ -1,13 +1,8 @@
 import React from 'react'
 import '@testing-library/jest-dom'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import Page from '../page'
-import type {
-    ButtonProps,
-    FlexProps,
-    HeadingProps,
-    TextProps
-} from '@chakra-ui/react'
+import type { FlexProps } from '@chakra-ui/react'
 
 jest.mock('next/link', () => ({
     __esModule: true,
@@ -31,56 +26,13 @@ jest.mock('next/link', () => ({
     }
 }))
 
-jest.mock('@chakra-ui/react', () => {
-    return {
-        __esModule: true,
-
-        Flex: ({ children }: FlexProps & { children?: React.ReactNode }) => (
-            <div>{children}</div>
-        ),
-        Heading: ({
-            children
-        }: HeadingProps & { children?: React.ReactNode }) => (
-            <h1>{children}</h1>
-        ),
-        Text: ({ children }: TextProps & { children?: React.ReactNode }) => (
-            <p>{children}</p>
-        ),
-        Button: ({
-            children,
-            onClick
-        }: ButtonProps & {
-            children?: React.ReactNode
-            onClick?: () => void
-        }) => <button onClick={onClick}>{children}</button>,
-
-        // Add missing HStack and VStack mocks used by the page
-        HStack: ({ children }: FlexProps & { children?: React.ReactNode }) => (
-            <div data-testid="hstack">{children}</div>
-        ),
-        VStack: ({ children }: FlexProps & { children?: React.ReactNode }) => (
-            <div data-testid="vstack">{children}</div>
-        ),
-
-        Tabs: {
-            Root: ({ children }: { children?: React.ReactNode }) => (
-                <div data-testid="tabs-root">{children}</div>
-            ),
-            List: ({ children }: { children?: React.ReactNode }) => (
-                <div data-testid="tabs-list">{children}</div>
-            ),
-            Trigger: ({ children }: { children?: React.ReactNode }) => (
-                <button type="button">{children}</button>
-            ),
-            Indicator: ({ children }: { children?: React.ReactNode }) => (
-                <div data-testid="tabs-indicator">{children}</div>
-            ),
-            Content: ({ children }: { children?: React.ReactNode }) => (
-                <div>{children}</div>
-            )
-        }
-    }
-})
+jest.mock('@chakra-ui/react', () => ({
+    __esModule: true,
+    VStack: ({ children }: FlexProps & { children?: React.ReactNode }) => (
+        <div data-testid="vstack">{children}</div>
+    ),
+    Spinner: () => <div data-testid="spinner" />
+}))
 
 jest.mock('@capacitor/core', () => ({
     Capacitor: {
@@ -90,87 +42,92 @@ jest.mock('@capacitor/core', () => ({
 
 jest.mock('../../context/AuthProvider.tsx', () => ({
     __esModule: true,
-    useAuth: jest.fn(() => ({
-        session: null
-    }))
+    useAuth: jest.fn(() => ({ session: null }))
 }))
 
 jest.mock('next/navigation', () => ({
-    useRouter: () => ({
-        replace: jest.fn()
-    })
+    useRouter: jest.fn(() => ({ replace: jest.fn() }))
 }))
 
-jest.mock('@/components/logo/Logo', () => ({
-    Logo: () => <svg data-testid="logo" />
+jest.mock('@/components/auth/TitleLogo', () => ({
+    __esModule: true,
+    default: () => <div data-testid="title-logo" />
+}))
+
+jest.mock('@/components/landing/LandingNav', () => ({
+    __esModule: true,
+    default: () => <nav data-testid="landing-nav" />
+}))
+
+jest.mock('@/components/landing/HeroSection', () => ({
+    __esModule: true,
+    default: () => <section data-testid="hero-section" />
+}))
+
+jest.mock('@/components/landing/FeatureSection', () => ({
+    __esModule: true,
+    default: ({ id }: { id: string }) => (
+        <section data-testid={`feature-${id}`} />
+    )
+}))
+
+jest.mock('@/components/landing/CtaSection', () => ({
+    __esModule: true,
+    default: () => <section data-testid="cta-section" />
 }))
 
 describe('Landing Page', () => {
     afterEach(() => {
-        jest.useRealTimers()
         jest.restoreAllMocks()
         jest.clearAllMocks()
     })
 
-    it('renders static landing content', () => {
+    it('renders all landing sections when not on native platform', () => {
         render(<Page />)
 
-        // Check for current content
-        expect(
-            screen.getByText(
-                /Kollec is a secure and centralized Pokémon card collection platform built for collectors by collectors!/i
-            )
-        ).toBeInTheDocument()
-
-        expect(screen.getByTestId('logo')).toBeInTheDocument()
-
-        expect(screen.getByText('Kollec')).toBeInTheDocument()
-
-        expect(
-            screen.getByRole('button', { name: /About/i })
-        ).toBeInTheDocument()
-
-        expect(
-            screen.getByRole('button', { name: /Features/i })
-        ).toBeInTheDocument()
-        expect(
-            screen.getByRole('button', { name: /Sign Up/i })
-        ).toBeInTheDocument()
-
-        expect(
-            screen.getByRole('button', { name: /Login/i })
-        ).toBeInTheDocument()
-
-        const signupAnchor = screen.getByLabelText('Go to Sign Up page')
-        const loginAnchor = screen.getByLabelText('Go to Login page')
-
-        expect(signupAnchor).toHaveAttribute('href', '/sign-up')
-        expect(loginAnchor).toHaveAttribute('href', '/sign-in')
+        expect(screen.getByTestId('landing-nav')).toBeInTheDocument()
+        expect(screen.getByTestId('hero-section')).toBeInTheDocument()
+        expect(screen.getByTestId('feature-scan')).toBeInTheDocument()
+        expect(screen.getByTestId('feature-search')).toBeInTheDocument()
+        expect(screen.getByTestId('feature-trade')).toBeInTheDocument()
+        expect(screen.getByTestId('cta-section')).toBeInTheDocument()
     })
 
-    it('handles anchor clicks by scrolling to and focusing the target element', () => {
+    it('shows spinner on native platform while redirecting to sign-in', () => {
+        const { Capacitor } = require('@capacitor/core')
+        ;(Capacitor.isNativePlatform as jest.Mock).mockReturnValue(true)
+
         render(<Page />)
 
-        const mockEl = {
-            scrollIntoView: jest.fn(),
-            focus: jest.fn()
-        } as unknown as HTMLElement
+        expect(screen.getByTestId('spinner')).toBeInTheDocument()
+        expect(screen.queryByTestId('landing-nav')).not.toBeInTheDocument()
+    })
 
-        const spy = jest
-            .spyOn(document, 'getElementById')
-            .mockImplementation((id: string) => {
-                return id === 'about' ? mockEl : null
-            })
-
-        fireEvent.click(screen.getByLabelText('Scroll to About section'))
-
-        expect(spy).toHaveBeenCalledWith('about')
-
-        expect(mockEl.scrollIntoView).toHaveBeenCalledWith({
-            behavior: 'smooth',
-            block: 'start'
+    it('redirects to /home when a session is active', () => {
+        const replace = jest.fn()
+        const { useAuth } = require('../../context/AuthProvider')
+        const { useRouter } = require('next/navigation')
+        ;(useAuth as jest.Mock).mockReturnValue({
+            session: { user: { id: '123' } }
         })
+        ;(useRouter as jest.Mock).mockReturnValue({ replace })
 
-        expect(mockEl.focus).toHaveBeenCalledWith({ preventScroll: true })
+        render(<Page />)
+
+        expect(replace).toHaveBeenCalledWith('/home')
+    })
+
+    it('redirects to /sign-in on native platform', () => {
+        const replace = jest.fn()
+        const { Capacitor } = require('@capacitor/core')
+        const { useAuth } = require('../../context/AuthProvider')
+        const { useRouter } = require('next/navigation')
+        ;(Capacitor.isNativePlatform as jest.Mock).mockReturnValue(true)
+        ;(useAuth as jest.Mock).mockReturnValue({ session: null })
+        ;(useRouter as jest.Mock).mockReturnValue({ replace })
+
+        render(<Page />)
+
+        expect(replace).toHaveBeenCalledWith('/sign-in')
     })
 })
